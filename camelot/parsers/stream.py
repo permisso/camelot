@@ -184,13 +184,14 @@ class Stream(TextBaseParser):
                         ]
                     )
 
-                outer_text = [
-                    t
-                    for direction in self.t_bbox
-                    for t in self.t_bbox[direction]
-                    if t.x0 > cols[-1][1] or t.x1 < cols[0][0]
-                ]
-                inner_text.extend(outer_text)
-                cols = self._add_columns(cols, inner_text, self.row_tol)
-                cols = self._join_columns(cols, text_x_min, text_x_max)
+                if cols:
+                    outer_text = [
+                        t
+                        for direction in self.t_bbox
+                        for t in self.t_bbox[direction]
+                        if t.x0 > cols[-1][1] or t.x1 < cols[0][0]
+                    ]
+                    inner_text.extend(outer_text)
+                    cols = self._add_columns(cols, inner_text, self.row_tol)
+                    cols = self._join_columns(cols, text_x_min, text_x_max)
         return cols, rows, None, None

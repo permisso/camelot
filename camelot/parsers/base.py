@@ -346,7 +346,8 @@ class TextBaseParser(BaseParser):
                 # is a gradual change across multiple columns.
                 row_y = t.y0
             temp.append(t)
-        rows.append(sorted(temp, key=lambda t: t.x0))
+        if temp:
+            rows.append(sorted(temp, key=lambda t: t.x0))
         return rows
 
     @staticmethod
@@ -413,6 +414,8 @@ class TextBaseParser(BaseParser):
             List of continuous row y-coordinate tuples.
 
         """
+        if not rows_grouped:
+            return []
         row_boundaries = [
             [max(t.y1 for t in r), min(t.y0 for t in r)] for r in rows_grouped
         ]
