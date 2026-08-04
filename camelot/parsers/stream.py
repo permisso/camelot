@@ -134,9 +134,13 @@ class Stream(TextBaseParser):
             bbox, self.horizontal_text, self.vertical_text
         )
 
-        text_x_min, text_y_min, text_x_max, text_y_max = bbox_from_textlines(
+        text_bbox = bbox_from_textlines(
             self.t_bbox["horizontal"] + self.t_bbox["vertical"]
         )
+        # Handle empty tables: fall back to the table area bounds
+        if text_bbox is None:
+            text_bbox = bbox
+        text_x_min, text_y_min, text_x_max, text_y_max = text_bbox
 
         rows_grouped = self._group_rows(self.t_bbox["horizontal"], row_tol=self.row_tol)
         rows = self._join_rows(rows_grouped, text_y_max, text_y_min)
